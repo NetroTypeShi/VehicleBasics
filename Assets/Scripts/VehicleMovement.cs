@@ -6,8 +6,9 @@ using UnityEngine;
 public class VehicleMovement : MonoBehaviour
 {
     Rigidbody rb;
-    [SerializeField] float speed;
+    [SerializeField] float acceleration;
     [SerializeField] float turnForce;
+    [SerializeField] float maxSpeed;
     bool forward = false;
     bool reverse = false;
     Vector3 vehicleDirection;
@@ -20,7 +21,8 @@ public class VehicleMovement : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        rb.velocity += vehicleDirection * speed * Time.fixedDeltaTime;
+        
+
         vehicleDirection = Vector3.zero;
         
         if (forward == true)
@@ -32,53 +34,16 @@ public class VehicleMovement : MonoBehaviour
             vehicleDirection = -gameObject.transform.forward;           
         }
 
+        if (rb.velocity.magnitude <= maxSpeed) { rb.velocity += vehicleDirection * acceleration * Time.fixedDeltaTime; }
+
         rb.AddTorque(0, turnForce*giro, 0);
     }
     void Update()
     {
         giro = 0;
-        if (Input.GetKey(KeyCode.W))
-        {
-            forward = true;
-        }
-        else
-        {
-            forward = false;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            reverse = true;
-        }
-        else
-        {
-            reverse = false;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            giro = -1;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            giro = 1;
-        }
-        if (Input.GetKey(KeyCode.A)&& Input.GetKey(KeyCode.D))
-        {
-            giro = 0;
-        }
+        forward = Input.GetKey(KeyCode.W);
+        reverse = Input.GetKey(KeyCode.S);
+        if (Input.GetKey(KeyCode.A)){giro -= 1;}
+        if (Input.GetKey(KeyCode.D)){giro += 1;}
     }
 }
-/*
- * 
- * 
- * acelerar:
- *      pulsarla
- *      no pulsarla
- *      
- * giro:
- *      0: no pulsar na || pulsar ambas
- *      -1: pulsar izq
- *      1: pulsar der
- *      
- * 
- * 
- */
