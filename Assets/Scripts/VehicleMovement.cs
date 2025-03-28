@@ -7,10 +7,12 @@ public class VehicleMovement : MonoBehaviour
 {
     Rigidbody rb;
     [SerializeField] float speed;
-    [SerializeField] float forceDirection;
+    [SerializeField] float turnForce;
     bool forward = false;
     bool reverse = false;
     Vector3 vehicleDirection;
+    
+    int giro = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,19 +22,21 @@ public class VehicleMovement : MonoBehaviour
     {
         rb.velocity += vehicleDirection * speed * Time.fixedDeltaTime;
         vehicleDirection = Vector3.zero;
-        rb.AddTorque(0, forceDirection, 0);
+        
         if (forward == true)
         {
-            vehicleDirection = Vector3.forward;
+            vehicleDirection = gameObject.transform.forward;
         }
         if (reverse == true)
         {
-            vehicleDirection = Vector3.back;
+            vehicleDirection = -gameObject.transform.forward;           
         }
+
+        rb.AddTorque(0, turnForce*giro, 0);
     }
     void Update()
     {
-        forceDirection = 0;
+        giro = 0;
         if (Input.GetKey(KeyCode.W))
         {
             forward = true;
@@ -51,11 +55,15 @@ public class VehicleMovement : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.A))
         {
-            forceDirection = 300;
+            giro = -1;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            forceDirection = -300;
+            giro = 1;
+        }
+        if (Input.GetKey(KeyCode.A)&& Input.GetKey(KeyCode.D))
+        {
+            giro = 0;
         }
     }
 }
@@ -67,9 +75,9 @@ public class VehicleMovement : MonoBehaviour
  *      no pulsarla
  *      
  * giro:
- *      no pulsar na || pulsar ambas
- *      pulsar izq
- *      pulsar der
+ *      0: no pulsar na || pulsar ambas
+ *      -1: pulsar izq
+ *      1: pulsar der
  *      
  * 
  * 
