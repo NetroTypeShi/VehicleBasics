@@ -686,8 +686,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 71.9
+<<<<<<< HEAD
   turnForce: 12.7
   brakeForce: 0
+=======
+  turnForce: 36.9
+>>>>>>> 0b51531130caab5a78de2fe09dfa0dde94b75dc0
   maxSpeed: 63.28
 --- !u!4 &768370504
 Transform:
