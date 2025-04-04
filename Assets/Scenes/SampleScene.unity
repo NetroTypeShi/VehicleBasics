@@ -686,8 +686,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   acceleration: 71.9
-  turnForce: 36.9
+  turnForce: 14.9
+  brakeForce: 29.7
   maxSpeed: 63.28
+  breakingForce: 0
 --- !u!4 &768370504
 Transform:
   m_ObjectHideFlags: 0
@@ -696,14 +698,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768370498}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.5055, y: 0.56, z: 11.6883}
+  m_LocalRotation: {x: 0, y: -0.7007225, z: 0, w: 0.713434}
+  m_LocalPosition: {x: 16.37, y: 0.56, z: 11.62}
   m_LocalScale: {x: 1.2486, y: 0.65491664, z: 2.7280722}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 334295546}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -88.97, z: 0}
 --- !u!1 &917233675
 GameObject:
   m_ObjectHideFlags: 0
