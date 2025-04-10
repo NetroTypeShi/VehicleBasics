@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class VehicleMovement : MonoBehaviour
@@ -10,23 +9,32 @@ public class VehicleMovement : MonoBehaviour
     [SerializeField] float turnForce;
     [SerializeField] float brakeForce;
     [SerializeField] float maxSpeed;
-    [SerializeField] float breakingForce;
-    float forwardSpeed;
-    bool braking;
-    bool forward = false;
-    bool reverse = false;
     Vector3 localDirection;
     Vector3 accelerationDirection;
     int giro = 0;
-    // Start is called before the first frame update
+    float u;
+    float fr;
+    BoxCollider collider;
+    
+    // Variables de control
+    bool braking;
+    bool forward = false;
+    bool reverse = false;
+
     void Start()
     {
-        rb = gameObject.GetComponent<Rigidbody>();    
+        rb = GetComponent<Rigidbody>();
+        u = collider.material.staticFriction;
+        fr = u * (-9.8f);
     }
-    private void FixedUpdate()
+
+    void FixedUpdate()
     {
+
+        // Convertir la velocidad mundial a local para evaluar en la dirección z
         localDirection = transform.InverseTransformDirection(rb.velocity);
 
+        // Reiniciar la dirección de aceleración
         accelerationDirection = Vector3.zero;
 
         if (forward)
@@ -47,7 +55,14 @@ public class VehicleMovement : MonoBehaviour
 
         if (braking)
         {
-            rb.velocity -= transform.forward * brakeForce * Time.fixedDeltaTime;
+            // Reducir la velocidad suavemente sin invertir la dirección
+            rb.velocity = rb.velocity * (1f - brakeForce * Time.fixedDeltaTime);
+
+            // Cuando la velocidad es muy baja, se anula para evitar movimientos residuales
+            if (rb.velocity.magnitude < 0.1f)
+            {
+                rb.velocity = Vector3.zero;
+            }
         }
         else
         {
@@ -61,13 +76,45 @@ public class VehicleMovement : MonoBehaviour
     {
         giro = 0;
         forward = Input.GetKey(KeyCode.W);
-        reverse = Input.GetKey(KeyCode.S);
 
-        if (Input.GetKey(KeyCode.S) && rb.velocity.magnitude > 0) { braking = true; }
-        else { braking = false; }
-        if (Input.GetKey(KeyCode.A)){giro = -1;}
-        if (Input.GetKey(KeyCode.D)){giro = 1;}
-        if (Input.GetKey(KeyCode.D)&& Input.GetKey(KeyCode.A)) { giro = 0; }
+        // Calcular la velocidad en el espacio local para determinar la dirección de movimiento
+        localDirection = transform.InverseTransformDirection(rb.velocity);
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            // Si se mueve hacia adelante (componente z mayor que un umbral), se aplica el freno
+            if (localDirection.z > 0.1f)
+            {
+                braking = true;
+                reverse = false;
+            }
+            // Si ya está detenido o se mueve en reversa, se activa la marcha atrás
+            else
+            {
+                braking = false;
+                reverse = true;
+            }
+        }
+        else
+        {
+            braking = false;
+            reverse = false;
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            giro = -1;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            giro = 1;
+        }
+        if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
+        {
+            giro = 0;
+        }
     }
-} // p5js plugins unity  
+}
+
+
 

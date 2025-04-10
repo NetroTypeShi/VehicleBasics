@@ -14,7 +14,6 @@ public class ColumnsMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         StartCoroutine(CountOverTime());
     }
 
@@ -31,7 +30,7 @@ public class ColumnsMovement : MonoBehaviour
                 elapsedTime += Time.deltaTime;
                 float normalizedElapsedTime = elapsedTime / duration;
                 float eval = curve.Evaluate(normalizedElapsedTime);
-                Vector3 finalTransform = Vector3.Lerp(pointA.position, pointB.position, eval);
+                Vector3 finalTransform = Vector3.Lerp(pointA.position,pointB.position, eval);
                 column.transform.position = finalTransform;
                 yield return new WaitForEndOfFrame();
             }
