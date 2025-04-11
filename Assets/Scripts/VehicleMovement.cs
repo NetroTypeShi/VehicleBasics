@@ -12,9 +12,6 @@ public class VehicleMovement : MonoBehaviour
     Vector3 localDirection;
     Vector3 accelerationDirection;
     int giro = 0;
-    float u;
-    float fr;
-    BoxCollider collider;
     
     // Variables de control
     bool braking;
@@ -24,8 +21,6 @@ public class VehicleMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        u = collider.material.staticFriction;
-        fr = u * (-9.8f);
     }
 
     void FixedUpdate()

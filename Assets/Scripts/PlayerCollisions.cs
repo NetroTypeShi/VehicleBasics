@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class PlayerCollisions : MonoBehaviour
 {
-    int coinNumber;
+    [SerializeField] GameObject Manager;
+    Manager gameManagerScript;
     // Start is called before the first frame update
     void Start()
     {
-      coinNumber = 0;
+        gameManagerScript = Manager.GetComponent<Manager>();
     }
 
     // Update is called once per frame
@@ -26,8 +27,20 @@ public class PlayerCollisions : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Coin"))
         {
-            coinNumber++;
-            print(coinNumber);
+
+            gameManagerScript.coinNumber++;
+            CoinAdded();
+            print(gameManagerScript.coinNumber);
+            Invoke("OffCoinAdded", 1f);
         }
+    }
+    void CoinAdded()
+    {
+        gameManagerScript.coinAdded = true;
+    }
+
+    void OffCoinAdded()
+    {
+        gameManagerScript.coinAdded = false;
     }
 }

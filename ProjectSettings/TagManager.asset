@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Coin
   - Column
+  - Manager
   layers:
   - Default
   - TransparentFX
