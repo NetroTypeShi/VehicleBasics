@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCollisions : MonoBehaviour
 {
     [SerializeField] GameObject Manager;
+    [SerializeField] string sceneName;
     Manager gameManagerScript;
     // Start is called before the first frame update
     void Start()
@@ -17,15 +19,15 @@ public class PlayerCollisions : MonoBehaviour
     {
         
     }
-
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Column"))
+        if (other.gameObject.CompareTag("Column"))
         {
             print("YOU LOOSE");
+            SceneManager.LoadScene(sceneName);
         }
 
-        if (collision.gameObject.CompareTag("Coin"))
+        if (other.gameObject.CompareTag("Coin"))
         {
 
             gameManagerScript.coinNumber++;
@@ -37,6 +39,7 @@ public class PlayerCollisions : MonoBehaviour
     void CoinAdded()
     {
         gameManagerScript.coinAdded = true;
+        StartCoroutine(gameManagerScript.PointsAnimation());
     }
 
     void OffCoinAdded()

@@ -5,6 +5,7 @@ using UnityEngine;
 public class CoinsBehavior : MonoBehaviour
 {
     [SerializeField] float rotationSpeed;
+    [SerializeField] Collider coinCollider;
     void Start()
     {
         
@@ -12,6 +13,14 @@ public class CoinsBehavior : MonoBehaviour
 
     void Update()
     {
-        transform.Rotate(Vector3.up, rotationSpeed * Time.fixedDeltaTime);
+        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+    }
+
+    void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

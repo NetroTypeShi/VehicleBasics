@@ -7,6 +7,10 @@ public class Manager : MonoBehaviour
 {
     public bool coinAdded;
     public int coinNumber;
+    float normalizedElapsedTime;
+    float eval;
+    float elapsedTime = 0f;
+    [SerializeField] float duration = 1.5f;
     [SerializeField] Canvas pointCanvas;
     [SerializeField] RectTransform purpleRectTransform;
     [SerializeField] RectTransform pinkRectTransform;
@@ -18,11 +22,14 @@ public class Manager : MonoBehaviour
     Vector3 newScalePk;
     Vector3 ogScalePu;
     Vector3 ogScalePk;
+    Vector3 finalScalePu;
+    Vector3 finalScalePk;
     Quaternion newRotationPu;
     Quaternion newRotationPk;
     Quaternion ogRotationPu;
     Quaternion ogRotationPk;
-    [SerializeField] float duration = 1.5f;
+    Quaternion finalRotationPu;
+    Quaternion finalRotationPk;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,43 +49,64 @@ public class Manager : MonoBehaviour
         purpleRectTransform.localRotation = ogRotationPu;
         pinkRectTransform.localScale = ogScalePk;
         pinkRectTransform.localRotation = ogRotationPk;
+
+        pointText.text = " ";
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(coinAdded == true)
-        {
-            pointText.text = coinNumber.ToString();
-            StartCoroutine(PointsAnimation());
-        }
-        else
-        {
-            pointText.text = " ";
-            StopCoroutine(PointsAnimation());
-        }
+      
     }
-    private IEnumerator PointsAnimation()
+    public IEnumerator PointsAnimation()
     {
-        while (true)
+        
+       
+        elapsedTime = 0f;
+        while (elapsedTime < duration)
         {
-            float elapsedTime = 0f;
-            while (elapsedTime < duration)
-            {
                 elapsedTime += Time.deltaTime;
-                float normalizedElapsedTime = elapsedTime / duration;
-                // ... interpolaciones y asignaciones ...
-                float eval = curve.Evaluate(normalizedElapsedTime);
-                Vector3 finalScalePu = Vector3.Lerp(ogScalePu, newScalePu, eval);
-                Quaternion finalRotationPu = Quaternion.Lerp(ogRotationPu, newRotationPu, eval);
-                Vector3 finalScalePk = Vector3.Lerp(ogScalePk, newScalePk, eval);
-                Quaternion finalRotationPk = Quaternion.Lerp(ogRotationPk, newRotationPk, eval);
+                normalizedElapsedTime = elapsedTime / duration;
+                eval = curve.Evaluate(normalizedElapsedTime);
+
+                finalScalePu = Vector3.Lerp(ogScalePu, newScalePu, eval);
+                finalRotationPu = Quaternion.Lerp(ogRotationPu, newRotationPu, eval);
+
+                finalScalePk = Vector3.Lerp(ogScalePk, newScalePk, eval);
+                finalRotationPk = Quaternion.Lerp(ogRotationPk, newRotationPk, eval);
+
+                pointText.text = coinNumber.ToString();
+
                 purpleRectTransform.localScale = finalScalePu;
                 purpleRectTransform.localRotation = finalRotationPu;
+
                 pinkRectTransform.localScale = finalScalePk;
                 pinkRectTransform.localRotation = finalRotationPk;
                 yield return new WaitForEndOfFrame();
-            }
         }
+
+        elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            normalizedElapsedTime = elapsedTime / duration;
+            eval = curve.Evaluate(normalizedElapsedTime);
+
+            finalScalePu = Vector3.Lerp(newScalePu, ogScalePu, eval);
+            finalRotationPu = Quaternion.Lerp(newRotationPu, ogRotationPu, eval);
+
+            finalScalePk = Vector3.Lerp(newScalePk, ogScalePk, eval);
+            finalRotationPk = Quaternion.Lerp(newRotationPk, ogRotationPk, eval);
+
+            pointText.text = " ";
+
+            purpleRectTransform.localScale = finalScalePu;
+            purpleRectTransform.localRotation = finalRotationPu;
+
+            pinkRectTransform.localScale = finalScalePk;
+            pinkRectTransform.localRotation = finalRotationPk;
+            yield return new WaitForEndOfFrame();
+        }
+
     }
 }
