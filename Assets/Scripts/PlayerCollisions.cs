@@ -21,12 +21,6 @@ public class PlayerCollisions : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Column"))
-        {
-            print("YOU LOOSE");
-            SceneManager.LoadScene(sceneName);
-        }
-
         if (other.gameObject.CompareTag("Coin"))
         {
 
@@ -34,6 +28,14 @@ public class PlayerCollisions : MonoBehaviour
             CoinAdded();
             print(gameManagerScript.coinNumber);
             Invoke("OffCoinAdded", 1f);
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Column"))
+        {
+            print("YOU LOOSE");
+            SceneManager.LoadScene(sceneName);
         }
     }
     void CoinAdded()

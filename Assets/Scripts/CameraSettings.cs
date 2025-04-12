@@ -3,10 +3,9 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    // Offset relativo al coche: (X, Y, Z)
-    // Por ejemplo, (0, 3, -4) ubica la cámara 3 unidades arriba y 4 unidades detrás.
-    [SerializeField] private Vector3 offset = new Vector3(0f, 3f, -4f);
-    [SerializeField] private float smoothTime = 0.1f;
+    // Cámara extremadamente cercana: justo detrás y un poco arriba
+    [SerializeField] private Vector3 offset = new Vector3(0f, 1.5f, -0.5f);
+    [SerializeField] private float smoothTime = 0.001f; // Súper rápida
     private Vector3 velocity = Vector3.zero;
 
     private void FixedUpdate()
@@ -16,6 +15,9 @@ public class CameraFollow : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, target.rotation, Time.deltaTime / smoothTime);
     }
 }
+
+
+
 
 
 

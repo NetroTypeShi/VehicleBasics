@@ -6,10 +6,9 @@ public class CoinsBehavior : MonoBehaviour
 {
     [SerializeField] float rotationSpeed;
     [SerializeField] Collider coinCollider;
-    void Start()
-    {
-        
-    }
+    int randomIndex;
+    // Lista de posiciones donde puede reaparecer la moneda
+    [SerializeField] List<Transform> teleportSpots;
 
     void Update()
     {
@@ -20,7 +19,13 @@ public class CoinsBehavior : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Player"))
         {
-            Destroy(gameObject);
+            TeleportToRandomSpot();
         }
+    }
+
+    void TeleportToRandomSpot()
+    {
+        randomIndex = Random.Range(0, teleportSpots.Count);
+        transform.position = teleportSpots[randomIndex].position;
     }
 }
