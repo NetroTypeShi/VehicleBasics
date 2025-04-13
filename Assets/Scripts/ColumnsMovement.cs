@@ -22,7 +22,7 @@ public class ColumnsMovement : MonoBehaviour
     {
         while (true)
         {
-            print("a");
+            
             float elapsedTime = 0f;
 
             while (elapsedTime < duration)

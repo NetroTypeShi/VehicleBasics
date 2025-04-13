@@ -60,8 +60,6 @@ public class Manager : MonoBehaviour
     }
     public IEnumerator PointsAnimation()
     {
-        
-       
         elapsedTime = 0f;
         while (elapsedTime < duration)
         {

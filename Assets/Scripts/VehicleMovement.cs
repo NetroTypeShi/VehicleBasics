@@ -8,15 +8,19 @@ public class VehicleMovement : MonoBehaviour
     [SerializeField] float acceleration;
     [SerializeField] float turnForce;
     [SerializeField] float brakeForce;
+    [SerializeField] float handBrakeForce;
     [SerializeField] float maxSpeed;
     [SerializeField] ParticleSystem rightPartileSystem;
     [SerializeField] ParticleSystem leftPartileSystem;
+    [SerializeField] TrailRenderer leftTrail;
+    [SerializeField] TrailRenderer rightTrail;
     Vector3 localDirection;
     Vector3 accelerationDirection;
     int giro = 0;
-    bool braking;
+    [SerializeField] bool braking;
     bool forward = false;
     bool reverse = false;
+    [SerializeField] bool handBraking = false;
 
     void Start()
     {
@@ -28,7 +32,6 @@ public class VehicleMovement : MonoBehaviour
 
         localDirection = transform.InverseTransformDirection(rb.velocity);
 
-        // Reiniciar la dirección de aceleración
         accelerationDirection = Vector3.zero;
 
         if (forward)
@@ -54,10 +57,27 @@ public class VehicleMovement : MonoBehaviour
             }
         }
 
+        if (handBraking)
+        {
+            rb.velocity = rb.velocity * (1f - handBrakeForce * Time.fixedDeltaTime);
+
+            rightTrail.emitting = true;
+            leftTrail.emitting = true;
+
+            if (rb.velocity.magnitude < 0.1f)
+            {
+                rb.velocity = Vector3.zero;
+            }
+        }
+        else
+        {
+            leftTrail.emitting = false;
+            rightTrail.emitting = false;
+        }
+
         if (braking)
         {
             rb.velocity = rb.velocity * (1f - brakeForce * Time.fixedDeltaTime);
-
             if (rb.velocity.magnitude < 0.1f)
             {
                 rb.velocity = Vector3.zero;
@@ -75,7 +95,6 @@ public class VehicleMovement : MonoBehaviour
     {
         giro = 0;
         forward = Input.GetKey(KeyCode.W);
-
         localDirection = transform.InverseTransformDirection(rb.velocity);
 
         if (Input.GetKey(KeyCode.S))
@@ -95,6 +114,15 @@ public class VehicleMovement : MonoBehaviour
         {
             braking = false;
             reverse = false;
+        }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            handBraking = true;
+        }
+        else
+        {
+            handBraking = false;
         }
 
         if (Input.GetKey(KeyCode.A))

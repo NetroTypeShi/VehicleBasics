@@ -7,7 +7,6 @@ public class CoinsBehavior : MonoBehaviour
     [SerializeField] float rotationSpeed;
     [SerializeField] Collider coinCollider;
     int randomIndex;
-    // Lista de posiciones donde puede reaparecer la moneda
     [SerializeField] List<Transform> teleportSpots;
 
     void Update()
